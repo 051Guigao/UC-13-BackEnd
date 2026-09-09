@@ -26,6 +26,6 @@ AppDataSource.initialize()
             console.log(`Servidor rodando em http://localhost:${PORT}`)
         })
     })
-    .catch((error: any) => {
+    .catch((error) => {
         console.error("Erro ao conectar com o banco de dados:", error)
     })

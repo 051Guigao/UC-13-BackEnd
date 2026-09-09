@@ -22,12 +22,22 @@ export const UserService = {
         // o método find() vem do TypeORM. Ele procura algo em uma tabela
         // ele aceita como parâmetro um objeto com opções para esta busca
         // nesse nosso caso, estamos buscando também os posts relacionados com este usuário
-        const users = await repo.find({ relations: ["posts"] })
+        const users = await repo.find({
+            relations: {
+                posts: true
+            }
+        })
+
         return users.map(user => omitPassword(user))
     },
 
     async getById(id: number) {
-        const user = await repo.findOne({ where: { id }, relations: ["posts"] })
+        const user = await repo.findOne({
+            where: { id },
+            relations: {
+                posts: true
+            }
+        })
 
         // Se não encontrarmos um user com esse id, ele não existe
         if (!user) {
@@ -58,7 +68,11 @@ export const UserService = {
     async login(data: { email: string, password: string }) {
         // Primeiro buscamos o usuário pelo email
         // Esse findOne por email será usado no login
-        const user = await repo.findOne({ where: { email: data.email } })
+        const user = await repo.findOne({
+            where: {
+                email: data.email
+            }
+        })
 
         // Se não encontrou usuário com esse email, lançamos erro
         if (!user) {
@@ -87,9 +101,24 @@ export const UserService = {
         }
     },
 
+
+    // =========================================================
+    // MÉTODO ANTIGO
+    //
+    // Ele recebia qualquer id enviado pelo Controller.
+    //
+    // Como o Controller antigo pegava esse id da URL,
+    // um usuário poderia tentar alterar outro usuário.
+    // =========================================================
+
+    /*
     async update(id: number, data: { name?: string, email?: string, password?: string }) {
         // encontra o usuário pelo id
-        const user = await repo.findOne({ where: { id } })
+        const user = await repo.findOne({
+            where: {
+                id
+            }
+        })
 
         if (!user) {
             throw new NotFoundError("Usuário não encontrado!")
@@ -100,7 +129,57 @@ export const UserService = {
         if (data.email) user.email = data.email
 
         // Se vier uma senha nova, a gente precisa criptografar ela de novo
-        if (data.password) user.password = await bcrypt.hash(data.password, 10)
+        if (data.password) {
+            user.password = await bcrypt.hash(data.password, 10)
+        }
+
+        // Depois de tudo isso acima, salvamos de novo
+        // Como o user já possui id, o TypeORM entende que é atualização, não novo cadastro
+        const updatedUser = await repo.save(user)
+
+        // Retorna o usuário sem a senha
+        return omitPassword(updatedUser)
+    },
+    */
+
+
+    // =========================================================
+    // NOVO MÉTODO
+    //
+    // O id recebido aqui não veio da URL.
+    // Ele veio do token do usuário autenticado.
+    //
+    // Por isso chamamos de updateMe.
+    // =========================================================
+
+    async updateMe(
+        id: number,
+        data: {
+            name?: string,
+            email?: string,
+            password?: string
+        }
+    ) {
+
+        // encontra o usuário pelo id que veio do token
+        const user = await repo.findOne({
+            where: {
+                id
+            }
+        })
+
+        if (!user) {
+            throw new NotFoundError("Usuário não encontrado!")
+        }
+
+        // Só vamos alterar/atualizar os campos que vierem
+        if (data.name) user.name = data.name
+        if (data.email) user.email = data.email
+
+        // Se vier uma senha nova, a gente precisa criptografar ela de novo
+        if (data.password) {
+            user.password = await bcrypt.hash(data.password, 10)
+        }
 
         // Depois de tudo isso acima, salvamos de novo
         // Como o user já possui id, o TypeORM entende que é atualização, não novo cadastro
@@ -110,7 +189,35 @@ export const UserService = {
         return omitPassword(updatedUser)
     },
 
+
+    // =========================================================
+    // MÉTODO ANTIGO
+    //
+    // Assim como no update antigo, recebíamos um id que
+    // originalmente vinha da URL.
+    // =========================================================
+
+    /*
     async delete(id: number) {
+        const result = await repo.delete(id)
+
+        if (result.affected === 0) {
+            throw new NotFoundError("Usuário não encontrado!")
+        }
+    }
+    */
+
+
+    // =========================================================
+    // NOVO MÉTODO
+    //
+    // O id vem do token.
+    //
+    // Portanto, esse método exclui o próprio usuário autenticado.
+    // =========================================================
+
+    async deleteMe(id: number) {
+
         const result = await repo.delete(id)
 
         if (result.affected === 0) {
