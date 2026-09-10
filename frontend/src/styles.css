@@ -1,0 +1,446 @@
+/* ==========================================================
+   styles.css — identidade visual da aplicação
+   Conceito: um "diário" de posts — masthead editorial,
+   serifa de destaque para títulos, corpo em sans-serif,
+   tom papel + tinta verde-pinho como cor de assinatura.
+   Reaproveita/estende as variáveis definidas em index.css.
+   ========================================================== */
+
+   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
+
+   :root {
+     /* Paleta — sobrescreve os tokens neutros de index.css */
+     --bg: #faf7f2;
+     --surface: #ffffff;
+     --text-h: #201c16;
+     --text: #746c60;
+     --border: #e7e0d3;
+   
+     --accent: #2b4a3f;
+     --accent-ink: #17281f;
+     --accent-bg: #e7ede9;
+     --accent-contrast: #f7f8f6;
+   
+     --danger: #a23e2c;
+     --danger-bg: #f5e8e2;
+   
+     --shadow: 0 1px 2px rgba(32, 28, 22, 0.04), 0 8px 24px -12px rgba(32, 28, 22, 0.18);
+   
+     --display: 'Fraunces', Georgia, 'Iowan Old Style', serif;
+   }
+   
+   @media (prefers-color-scheme: dark) {
+     :root {
+       --bg: #14140f;
+       --surface: #1b1b15;
+       --text-h: #f1ede3;
+       --text: #a29a8c;
+       --border: #302f27;
+   
+       --accent: #8fbba7;
+       --accent-ink: #dceee4;
+       --accent-bg: #223028;
+       --accent-contrast: #10201a;
+   
+       --danger: #e08a76;
+       --danger-bg: #33221d;
+   
+       --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -14px rgba(0, 0, 0, 0.6);
+     }
+   }
+   
+   * {
+     box-sizing: border-box;
+   }
+   
+   body {
+     background: var(--bg);
+   }
+   
+   ::selection {
+     background: var(--accent);
+     color: var(--accent-contrast);
+   }
+   
+   /* ---------- Masthead ---------- */
+   
+   .topbar {
+     display: flex;
+     align-items: flex-end;
+     justify-content: space-between;
+     gap: 24px;
+     flex-wrap: wrap;
+     padding: 40px 24px 20px;
+     border-bottom: 2px solid var(--text-h);
+     text-align: left;
+   }
+   
+   .topbar h1 {
+     font-family: var(--display);
+     font-weight: 600;
+     font-size: 40px;
+     letter-spacing: -0.5px;
+     margin: 0;
+     line-height: 1.05;
+   }
+   
+   .topbar p {
+     margin: 6px 0 0;
+     color: var(--text);
+     font-size: 15px;
+     font-style: italic;
+   }
+   
+   .user-area {
+     display: flex;
+     align-items: center;
+     gap: 16px;
+     font-size: 14px;
+     color: var(--text);
+     padding-bottom: 4px;
+   }
+   
+   .user-area strong {
+     color: var(--text-h);
+     font-weight: 600;
+   }
+   
+   /* ---------- Layout principal ---------- */
+   
+   .container {
+     width: 100%;
+     max-width: 660px;
+     margin: 0 auto;
+     padding: 40px 24px 80px;
+     display: flex;
+     flex-direction: column;
+     gap: 40px;
+     text-align: left;
+   }
+   
+   /* ---------- Cards (autenticação / novo post) ---------- */
+   
+   .card {
+     background: var(--surface);
+     border: 1px solid var(--border);
+     border-radius: 10px;
+     padding: 28px;
+     box-shadow: var(--shadow);
+   }
+   
+   .card h2 {
+     font-family: var(--display);
+     font-weight: 600;
+     font-size: 22px;
+     letter-spacing: -0.2px;
+     margin: 0;
+     color: var(--text-h);
+   }
+   
+   .auth-card {
+     max-width: 400px;
+     margin: 0 auto;
+     border-top: 3px solid var(--accent);
+     border-radius: 4px 4px 10px 10px;
+   }
+   
+   /* O card de "novo post" recebe a mesma assinatura de cor */
+   .container > .card:not(.auth-card):not(.post) {
+     border-top: 3px solid var(--accent);
+     border-radius: 4px 4px 10px 10px;
+   }
+   
+   /* ---------- Formulários ---------- */
+   
+   form {
+     display: flex;
+     flex-direction: column;
+     gap: 18px;
+     margin-top: 18px;
+   }
+   
+   label {
+     display: flex;
+     flex-direction: column;
+     gap: 7px;
+     font-size: 13px;
+     font-weight: 600;
+     color: var(--text-h);
+   }
+   
+   input,
+   textarea {
+     font: inherit;
+     padding: 11px 13px;
+     border-radius: 7px;
+     border: 1px solid var(--border);
+     background: var(--bg);
+     color: var(--text-h);
+     outline: none;
+     transition: border-color 0.15s ease, box-shadow 0.15s ease;
+   }
+   
+   input::placeholder,
+   textarea::placeholder {
+     color: var(--text);
+     opacity: 0.6;
+   }
+   
+   input:focus-visible,
+   textarea:focus-visible {
+     border-color: var(--accent);
+     box-shadow: 0 0 0 3px var(--accent-bg);
+   }
+   
+   textarea {
+     resize: vertical;
+     min-height: 120px;
+     line-height: 1.5;
+   }
+   
+   /* ---------- Botões ---------- */
+   
+   button {
+     font: inherit;
+     cursor: pointer;
+     border: none;
+     border-radius: 7px;
+     padding: 11px 20px;
+     font-weight: 600;
+     font-size: 14px;
+     transition: background-color 0.15s ease, border-color 0.15s ease,
+       color 0.15s ease, transform 0.08s ease;
+   }
+   
+   button:focus-visible {
+     outline: 2px solid var(--accent);
+     outline-offset: 2px;
+   }
+   
+   button[type='submit'] {
+     background: var(--accent);
+     color: var(--accent-contrast);
+   }
+   
+   button[type='submit']:hover:not(:disabled) {
+     background: var(--accent-ink);
+   }
+   
+   button[type='submit']:active:not(:disabled) {
+     transform: translateY(1px);
+   }
+   
+   button:disabled {
+     opacity: 0.55;
+     cursor: not-allowed;
+   }
+   
+   button.secondary {
+     background: transparent;
+     color: var(--text-h);
+     border: 1px solid var(--border);
+   }
+   
+   button.secondary:hover {
+     border-color: var(--text-h);
+   }
+   
+   button.link-button {
+     background: none;
+     padding: 4px 0;
+     margin-top: 4px;
+     color: var(--accent);
+     font-weight: 500;
+     font-size: 13px;
+     text-decoration: underline;
+     text-underline-offset: 3px;
+     text-decoration-color: var(--border);
+   }
+   
+   button.link-button:hover {
+     text-decoration-color: var(--accent);
+   }
+   
+   .actions {
+     display: flex;
+     gap: 12px;
+     margin-top: 2px;
+   }
+   
+   /* Ícones de editar / excluir — discretos até o hover */
+   
+   .icon-button {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 34px;
+     height: 34px;
+     padding: 0;
+     border-radius: 7px;
+     background: transparent;
+     color: var(--text);
+     border: 1px solid transparent;
+   }
+   
+   .icon-button:hover {
+     background: var(--bg);
+     border-color: var(--border);
+     color: var(--text-h);
+   }
+   
+   .icon-button.danger:hover {
+     color: var(--danger);
+     background: var(--danger-bg);
+     border-color: transparent;
+   }
+   
+   /* ---------- Mensagens de retorno ---------- */
+   
+   .message {
+     margin-top: 4px;
+     padding: 11px 14px;
+     border-radius: 7px;
+     border-left: 3px solid var(--accent);
+     background: var(--accent-bg);
+     color: var(--text-h);
+     font-size: 14px;
+   }
+   
+   .message.error {
+     border-left-color: var(--danger);
+     background: var(--danger-bg);
+     color: var(--danger);
+   }
+   
+   /* ---------- Título de seção ---------- */
+   
+   .section-title {
+     display: flex;
+     align-items: flex-end;
+     justify-content: space-between;
+     gap: 16px;
+     flex-wrap: wrap;
+     padding-bottom: 14px;
+     border-bottom: 1px solid var(--border);
+   }
+   
+   .section-title h2 {
+     font-family: var(--display);
+     font-weight: 600;
+     font-size: 24px;
+     margin: 0 0 4px;
+     color: var(--text-h);
+   }
+   
+   .section-title p {
+     margin: 0;
+     color: var(--text);
+     font-size: 14px;
+   }
+   
+   /* ---------- Lista de posts (estilo "diário") ---------- */
+   /* Em vez de cartões repetidos, cada post é uma entrada
+      separada por um filete — evita o efeito "kit de cards". */
+   
+   .posts {
+     display: flex;
+     flex-direction: column;
+   }
+   
+   .card.post {
+     background: transparent;
+     border: none;
+     border-radius: 0;
+     box-shadow: none;
+     padding: 26px 0;
+     border-bottom: 1px solid var(--border);
+   }
+   
+   .posts .card.post:first-child {
+     padding-top: 4px;
+   }
+   
+   .posts .card.post:last-child {
+     border-bottom: none;
+   }
+   
+   .post-header {
+     display: flex;
+     align-items: flex-start;
+     justify-content: space-between;
+     gap: 16px;
+   }
+   
+   .post-header h2 {
+     font-family: var(--display);
+     font-weight: 500;
+     font-size: 21px;
+     letter-spacing: -0.1px;
+     margin: 0 0 4px;
+     color: var(--text-h);
+   }
+   
+   .post-header small {
+     color: var(--text);
+     font-size: 13px;
+     font-style: italic;
+   }
+   
+   .post-actions {
+     display: flex;
+     gap: 4px;
+     flex-shrink: 0;
+     opacity: 0.5;
+     transition: opacity 0.15s ease;
+   }
+   
+   .card.post:hover .post-actions {
+     opacity: 1;
+   }
+   
+   .post-content {
+     margin-top: 14px;
+     color: var(--text);
+     font-size: 15.5px;
+     line-height: 1.65;
+     white-space: pre-wrap;
+   }
+   
+   /* ---------- Responsivo ---------- */
+   
+   @media (max-width: 640px) {
+     .topbar {
+       padding: 28px 20px 16px;
+     }
+   
+     .topbar h1 {
+       font-size: 32px;
+     }
+   
+     .container {
+       padding: 28px 20px 60px;
+       gap: 32px;
+     }
+   
+     .card {
+       padding: 20px;
+     }
+   
+     .post-header {
+       flex-direction: column;
+       gap: 6px;
+     }
+   
+     .post-actions {
+       align-self: flex-end;
+       opacity: 1;
+     }
+   }
+   
+   /* ---------- Preferências de acessibilidade ---------- */
+   
+   @media (prefers-reduced-motion: reduce) {
+     * {
+       transition: none !important;
+     }
+   }

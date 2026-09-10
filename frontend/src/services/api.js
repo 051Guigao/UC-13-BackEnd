@@ -7,6 +7,15 @@ const API_URL = "http://localhost:3000"
 
 export async function cadastrarUsuario(data) {
 
+    // o método assíncrono fetch se comunica com o backend
+    //  precissamos passar dois parametros
+    // o primeiro a passar é a API
+    //
+    //
+    //
+    //
+    //
+
     const response = await fetch(`${API_URL}/users`, {
         method: "POST",
 
@@ -16,7 +25,7 @@ export async function cadastrarUsuario(data) {
 
         body: JSON.stringify(data)
     })
-
+// Guarda a resposta do servidor
     const result = await response.json()
 
     if (!response.ok) {
